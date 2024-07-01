@@ -2,6 +2,7 @@
 	"name": "object-utility",
 	"displayName": "Object Utility",
 	"description": "easy to manage code object, with this extension.",
+	"icon": "media/main-icon.png",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.90.0"
@@ -36,6 +37,11 @@
 		},
 		"commands": [
 			{
+				"command": "objectUtility.openSearch",
+				"title": "Search",
+				"icon": "media/action-icon/search.svg"
+			},
+			{
 				"command": "objectUtility.addObject",
 				"title": "Add new object",
 				"icon": "media/action-icon/add-object.svg"
@@ -69,7 +75,12 @@
 				{
 					"command": "objectUtility.addObject",
 					"when": "view == objects",
-					"group": "navigation"
+					"group": "navigation@0"
+				},
+				{
+					"command": "objectUtility.openSearch",
+					"when": "view == objects",
+					"group": "navigation@1"
 				}
 			],
 			"view/item/context": [

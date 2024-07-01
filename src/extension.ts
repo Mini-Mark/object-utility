@@ -86,8 +86,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	//#region register command
 	context.subscriptions.push(
+		vscode.commands.registerCommand("objectUtility.openSearch", () => {
+			vscode.commands.executeCommand('list.find');
+		})
+	);
+
+	context.subscriptions.push(
 		vscode.commands.registerCommand("objectUtility.addObject", () => {
-			addObjectCommand(context);
+			addObjectCommand(context);;
 		})
 	);
 

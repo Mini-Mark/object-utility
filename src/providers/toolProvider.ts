@@ -22,6 +22,17 @@ export class ToolPanelProvider implements vscode.WebviewViewProvider {
 
 		this.webviewView.webview.options = {
 			enableScripts: true,
+			localResourceRoots: [
+				vscode.Uri.joinPath(this.context.extensionUri, "media"),
+				vscode.Uri.joinPath(this.context.extensionUri, "resource"),
+				vscode.Uri.joinPath(
+					this.context.extensionUri,
+					"node_modules",
+					"@vscode",
+					"webview-ui-toolkit",
+					"dist"
+				),
+			],
 		};
 
 		this.webviewView.webview.html = this.getHtmlForWebview(
@@ -82,7 +93,12 @@ export class ToolPanelProvider implements vscode.WebviewViewProvider {
 			)
 		);
 		const mainStyle = webview.asWebviewUri(
-			vscode.Uri.joinPath(this.context.extensionUri, "src", "styles.css")
+			vscode.Uri.joinPath(
+				this.context.extensionUri,
+				"resource",
+				"style",
+				"styles.css"
+			)
 		);
 
 		//page content
@@ -265,7 +281,7 @@ export class ToolPanelProvider implements vscode.WebviewViewProvider {
 	}
 
 	public refresh() {
-		if(this.webviewView){
+		if (this.webviewView) {
 			this.webviewView.webview.html = this.getHtmlForWebview(
 				this.webviewView.webview
 			);
