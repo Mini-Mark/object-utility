@@ -1,0 +1,76 @@
+/* toolProvider */
+#toolProvider .center-alert {
+	margin-top: 10px;
+	width: 100%;
+	text-align: center;
+}
+
+#toolProvider vscode-button {
+	width: 100%;
+	max-width: 105px;
+}
+
+#toolProvider vscode-button.full {
+	width: 100%;
+	max-width: 100%;
+}
+
+#toolProvider section {
+	display: flex;
+	flex-direction: column;
+
+	width: 100%;
+
+	row-gap: 10px;
+}
+
+#toolProvider .divider {
+	width: 100%;
+	border: 1px solid var(--vscode-sideBarSectionHeader-background);
+}
+
+#toolProvider section .item {
+	display: flex;
+	align-items: center;
+
+	column-gap: 8px;
+}
+
+#toolProvider section .item.disabled .description {
+	opacity: var(--disabled-opacity);
+}
+
+#toolProvider section .item .description {
+	margin-left: 10px;
+}
+
+#toolProvider .select-node {
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
+}
+
+#toolProvider .select-node .image {
+	align-items: center;
+	background-position: 0;
+	background-repeat: no-repeat;
+	background-size: 19.2px;
+	display: flex;
+	height: 26.4px;
+	justify-content: center;
+	padding-right: 7.2px;
+	width: 19.2px;
+	-webkit-font-smoothing: antialiased;
+}
+
+#toolProvider .select-node .name {
+	font-size: 1.2em;
+	white-space: pre;
+}
+
+#toolProvider .select-node .type {
+	font-size: 0.9em;
+	margin-left: 0.5em;
+	opacity: 0.7;
+	white-space: pre;
+}

@@ -1,0 +1,141 @@
+{
+	"name": "object-utility",
+	"displayName": "Object Utility",
+	"description": "easy to manage code object, with this extension.",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.90.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "objectUtility-Sidebar",
+					"title": "Object Utility",
+					"icon": "media/sidebar-icon.svg"
+				}
+			]
+		},
+		"views": {
+			"objectUtility-Sidebar": [
+				{
+					"id": "objects",
+					"name": "Objects"
+				},
+				{
+					"id": "tool",
+					"name": "Tool",
+					"type": "webview"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "objectUtility.addObject",
+				"title": "Add new object",
+				"icon": "media/action-icon/add-object.svg"
+			},
+			{
+				"command": "objectUtility.copyPath",
+				"title": "Copy path",
+				"icon": "media/action-icon/copy-code.svg"
+			},
+			{
+				"command": "objectUtility.copyKey",
+				"title": "Copy key",
+				"icon": "media/action-icon/copy-clipboard.svg"
+			},
+			{
+				"command": "objectUtility.copyObject",
+				"title": "Copy object",
+				"icon": "media/action-icon/copy-object.svg"
+			},
+			{
+				"command": "objectUtility.renameObject",
+				"title": "Rename"
+			},
+			{
+				"command": "objectUtility.deleteObject",
+				"title": "Delete"
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "objectUtility.addObject",
+					"when": "view == objects",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "objectUtility.copyPath",
+					"when": "view == objects",
+					"group": "inline@0"
+				},
+				{
+					"command": "objectUtility.copyKey",
+					"when": "view == objects",
+					"group": "inline@1"
+				},
+				{
+					"command": "objectUtility.copyObject",
+					"when": "view == objects",
+					"group": "inline@2"
+				},
+				{
+					"command": "objectUtility.copyPath",
+					"when": "view == objects",
+					"group": "1_copy@0"
+				},
+				{
+					"command": "objectUtility.copyKey",
+					"when": "view == objects",
+					"group": "1_copy@1"
+				},
+				{
+					"command": "objectUtility.copyObject",
+					"when": "view == objects",
+					"group": "1_copy@2"
+				},
+				{
+					"command": "objectUtility.renameObject",
+					"when": "view == objects && viewItem != ArrayChild",
+					"group": "2_action"
+				},
+				{
+					"command": "objectUtility.deleteObject",
+					"when": "view == objects",
+					"group": "2_action"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@types/mocha": "^10.0.6",
+		"@types/node": "20.x",
+		"@types/vscode": "^1.90.0",
+		"@typescript-eslint/eslint-plugin": "^7.11.0",
+		"@typescript-eslint/parser": "^7.11.0",
+		"@vscode/test-cli": "^0.0.9",
+		"@vscode/test-electron": "^2.4.0",
+		"eslint": "^8.57.0",
+		"typescript": "^5.4.5"
+	},
+	"dependencies": {
+		"@vscode/webview-ui-toolkit": "^1.4.0"
+	}
+}
