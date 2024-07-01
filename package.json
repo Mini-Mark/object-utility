@@ -116,6 +116,10 @@
 			]
 		}
 	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Mini-Mark/object-utility.git"
+	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
