@@ -37,7 +37,7 @@ export class ObjectsPanelProvider implements vscode.TreeDataProvider<Node> {
 
 	async getNodeByPath(path?: string) {
 		if (path) {
-			let splitPath = path.split(".");
+			let splitPath = path.replace(/\?\./gi, ".").split(".");
 			let matchingNode;
 			if (splitPath.length > 0) {
 				let findPath = splitPath[0];

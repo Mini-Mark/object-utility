@@ -23,7 +23,7 @@ export class Node extends vscode.TreeItem {
 		this.tooltip = this.getTooltip(jsonObject);
 		this.description = this.isRoot
 			? ""
-			: this.getTypeDescription(jsonObject);
+			: jsonObject === null ? "unknown" : this.getTypeDescription(jsonObject);
 		this.id = `${objectId}:${path}`;
 
 		//set context
@@ -31,17 +31,19 @@ export class Node extends vscode.TreeItem {
 			? "ArrayChild"
 			: this.description;
 
-		this.iconPath = this.isRoot
-			? vscode.Uri.file(
-					`${__dirname}\\..\\..\\media\\treeview-icon\\root.svg`
-			  )
-			: this.description.includes("Array")
-			? vscode.Uri.file(
-					`${__dirname}\\..\\..\\media\\treeview-icon\\array.svg`
-			  )
-			: vscode.Uri.file(
-					`${__dirname}\\..\\..\\media\\treeview-icon\\${this.description.toLowerCase()}.svg`
-			  );
+		if (this.isRoot) {
+			this.iconPath = vscode.Uri.file(
+				`${__dirname}\\..\\..\\media\\treeview-icon\\root.svg`
+			);
+		} else if (this.description.includes("Array")) {
+			this.iconPath = vscode.Uri.file(
+				`${__dirname}\\..\\..\\media\\treeview-icon\\array.svg`
+			);
+		} else {
+			this.iconPath = vscode.Uri.file(
+				`${__dirname}\\..\\..\\media\\treeview-icon\\${this.description.toLowerCase()}.svg`
+			);
+		}
 
 		this.getChildren();
 	}
@@ -53,15 +55,17 @@ export class Node extends vscode.TreeItem {
 		this._children = value;
 
 		if (Array.isArray(this.jsonObject)) {
-			if(this._children){
-				this.jsonObject = this._children.map((child) => child.jsonObject);
+			if (this._children) {
+				this.jsonObject = this._children.map(
+					(child) => child.jsonObject
+				);
 			}
 		} else if (
 			typeof this.jsonObject === "object" &&
 			this.jsonObject !== null
 		) {
 			this.jsonObject = {};
-			if(this._children){
+			if (this._children) {
 				this._children.forEach((child) => {
 					this.jsonObject[child.label] = child.jsonObject;
 				});
@@ -183,7 +187,7 @@ export function serializeNode(node: Node): any {
 		isRoot: node.isRoot,
 		rootNode: undefined,
 		collapsibleState: node.collapsibleState,
-		children: undefined
+		children: undefined,
 	};
 
 	if (node.children) {

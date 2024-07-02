@@ -1,5 +1,6 @@
-import { Node } from './providers/node';
+import { Node } from "./providers/node";
 import * as vscode from "vscode";
+import * as path from "path";
 
 //Sidebar
 import { ObjectsPanelProvider } from "./providers/objectsProvider";
@@ -51,13 +52,70 @@ export async function activate(context: vscode.ExtensionContext) {
 		})
 	);
 
+	//Hover event
+	vscode.languages.registerHoverProvider("typescript", {
+		async provideHover(document, position, token) {
+			const customWordPattern = /[\w\.\?\[\]]+/g;
+
+			const wordRange = document.getWordRangeAtPosition(
+				position,
+				customWordPattern
+			);
+
+			if (wordRange) {
+				let findPath = document.getText(wordRange).split(".");
+				if (findPath?.length > 0) {
+					if (findPath[0] === "this") {
+						findPath.shift();
+					}
+
+					const node = await globalObjectsPanelProvider.getNodeByPath(
+						findPath.join(".")
+					);
+
+					if (node) {
+						const hoverContent = new vscode.MarkdownString();
+						const nodeIcon = vscode.Uri.file(
+							path.join(
+								context.extensionPath,
+								"media",
+								"treeview-icon",
+								node.iconPath.path.split("/").reverse()[0]
+							)
+						).toString();
+
+						hoverContent.appendMarkdown(
+							`<span>
+                                <img src="${nodeIcon}" alt="node-icon" width="16" height="16" />&nbsp;
+                                <b>${node.label} &nbsp;<code>${node.isRoot ? 'root' : node.description}</code></b>
+							</span>\n`
+						);
+
+						hoverContent.appendCodeblock(
+							JSON.stringify(node.jsonObject, null, 2),
+							"json"
+						);
+
+						hoverContent.isTrusted = true;
+						hoverContent.supportHtml = true;
+
+						return new vscode.Hover(
+							hoverContent,
+							new vscode.Range(position, position)
+						);
+					}
+				}
+			}
+		},
+	});
+
 	context.subscriptions.push(
 		vscode.window.onDidChangeTextEditorSelection(async (event) => {
 			const editor = event.textEditor;
 			const position = event.selections[0].active;
 			const document = editor.document;
 
-			const customWordPattern = /[\w\.\-\[\]]+/g;
+			const customWordPattern = /[\w\.\?\[\]]+/g;
 
 			const wordRange = document.getWordRangeAtPosition(
 				position,
@@ -87,13 +145,13 @@ export async function activate(context: vscode.ExtensionContext) {
 	//#region register command
 	context.subscriptions.push(
 		vscode.commands.registerCommand("objectUtility.openSearch", () => {
-			vscode.commands.executeCommand('list.find');
+			vscode.commands.executeCommand("list.find");
 		})
 	);
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand("objectUtility.addObject", () => {
-			addObjectCommand(context);;
+			addObjectCommand(context);
 		})
 	);
 
