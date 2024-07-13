@@ -147,15 +147,16 @@ export class ToolPanelProvider implements vscode.WebviewViewProvider {
 			<vscode-panel-tab id="tab-1">
 				DETAIL
 			</vscode-panel-tab>
-
-			<vscode-panel-tab id="tab-2">
-				API (CRUD)
-			</vscode-panel-tab>
-
-			<vscode-panel-tab id="tab-3">
-				FUNCTION
-			</vscode-panel-tab>
 		`;
+
+		// ------- Coming Soon Feature -------
+		// <vscode-panel-tab id="tab-2">
+		// 	API (CRUD)
+		// </vscode-panel-tab>
+
+		// <vscode-panel-tab id="tab-3">
+		// 	FUNCTION
+		// </vscode-panel-tab>
 
 		//detail
 		let jsonPreview = "";
@@ -174,73 +175,74 @@ export class ToolPanelProvider implements vscode.WebviewViewProvider {
 			</vscode-panel-view>
 		`;
 
+		// ------- Coming Soon Feature -------
 		//api (crud)
-		contentHTML += `
-			<vscode-panel-view id="view-2">
-    			<section>
-					<div class="title">Access a list of utility functions for object operations.</div>
-					<div class="item">
-						<vscode-button id="api.objectLiteral" class="full">Object Literal</vscode-button>
-					</div>
-					<hr class="divider" />
-					<div class="title">Select Functions for Object Literal</div>
-					<div class="item">
-						<vscode-checkbox id="api.checkbox.get" checked></vscode-checkbox>
-						<vscode-button id="api.get">GET</vscode-button>
-						<div class="description">Retrieve all objects.</div>
-					</div>
-					<div class="item">
-						<vscode-checkbox id="api.checkbox.update" checked></vscode-checkbox>
-						<vscode-button id="api.update">UPDATE</vscode-button>
-						<div class="description">Update an existing object.</div>
-					</div>
-					<div class="item">
-						<vscode-checkbox id="api.checkbox.delete" checked></vscode-checkbox>
-						<vscode-button id="api.delete">DELETE</vscode-button>
-						<div class="description">Delete an object.</div>
-					</div>
-					<div class="item">
-						<vscode-checkbox id="api.checkbox.insert" checked></vscode-checkbox>
-						<vscode-button id="api.insert">INSERT</vscode-button>
-						<div class="description">Insert a new object.</div>
-					</div>
-					<div class="item disabled">
-						<vscode-checkbox id="api.checkbox.getFromId" disabled></vscode-checkbox>
-						<vscode-button id="api.getFromID" disabled>GET FROM ID</vscode-button>
-						<div class="description">Retrieve an object by its ID.</div>
-					</div>
-				</section>
-			</vscode-panel-view>
-		`;
+		// contentHTML += `
+		// 	<vscode-panel-view id="view-2">
+    	// 		<section>
+		// 			<div class="title">Access a list of utility functions for object operations.</div>
+		// 			<div class="item">
+		// 				<vscode-button id="api.objectLiteral" class="full">Object Literal</vscode-button>
+		// 			</div>
+		// 			<hr class="divider" />
+		// 			<div class="title">Select Functions for Object Literal</div>
+		// 			<div class="item">
+		// 				<vscode-checkbox id="api.checkbox.get" checked></vscode-checkbox>
+		// 				<vscode-button id="api.get">GET</vscode-button>
+		// 				<div class="description">Retrieve all objects.</div>
+		// 			</div>
+		// 			<div class="item">
+		// 				<vscode-checkbox id="api.checkbox.update" checked></vscode-checkbox>
+		// 				<vscode-button id="api.update">UPDATE</vscode-button>
+		// 				<div class="description">Update an existing object.</div>
+		// 			</div>
+		// 			<div class="item">
+		// 				<vscode-checkbox id="api.checkbox.delete" checked></vscode-checkbox>
+		// 				<vscode-button id="api.delete">DELETE</vscode-button>
+		// 				<div class="description">Delete an object.</div>
+		// 			</div>
+		// 			<div class="item">
+		// 				<vscode-checkbox id="api.checkbox.insert" checked></vscode-checkbox>
+		// 				<vscode-button id="api.insert">INSERT</vscode-button>
+		// 				<div class="description">Insert a new object.</div>
+		// 			</div>
+		// 			<div class="item disabled">
+		// 				<vscode-checkbox id="api.checkbox.getFromId" disabled></vscode-checkbox>
+		// 				<vscode-button id="api.getFromID" disabled>GET FROM ID</vscode-button>
+		// 				<div class="description">Retrieve an object by its ID.</div>
+		// 			</div>
+		// 		</section>
+		// 	</vscode-panel-view>
+		// `;
 
 		//function
-		contentHTML += `
-			<vscode-panel-view id="view-3">
-    			<section>
-					<div class="title">Useful JavaScript Functions</div>
-					<div class="item">
-						<vscode-button id="function.map">map()</vscode-button>
-						<div class="description">Transform elements in an array.</div>
-					</div>
-					<div class="item">
-						<vscode-button id="function.filter">filter()</vscode-button>
-						<div class="description">Filter elements in an array.</div>
-					</div>
-					<div class="item">
-						<vscode-button id="function.find">find()</vscode-button>
-						<div class="description">Find an element in an array.</div>
-					</div>
-					<div class="item">
-						<vscode-button id="function.indexOf">indexOf()</vscode-button>
-						<div class="description">Get index of an element.</div>
-					</div>
-					<div class="item">
-						<vscode-button id="function.reduce">reduce()</vscode-button>
-						<div class="description">Reduce array to a single value.</div>
-					</div>
-				</section>
-			</vscode-panel-view>
-		`;
+		// contentHTML += `
+		// 	<vscode-panel-view id="view-3">
+    	// 		<section>
+		// 			<div class="title">Useful JavaScript Functions</div>
+		// 			<div class="item">
+		// 				<vscode-button id="function.map">map()</vscode-button>
+		// 				<div class="description">Transform elements in an array.</div>
+		// 			</div>
+		// 			<div class="item">
+		// 				<vscode-button id="function.filter">filter()</vscode-button>
+		// 				<div class="description">Filter elements in an array.</div>
+		// 			</div>
+		// 			<div class="item">
+		// 				<vscode-button id="function.find">find()</vscode-button>
+		// 				<div class="description">Find an element in an array.</div>
+		// 			</div>
+		// 			<div class="item">
+		// 				<vscode-button id="function.indexOf">indexOf()</vscode-button>
+		// 				<div class="description">Get index of an element.</div>
+		// 			</div>
+		// 			<div class="item">
+		// 				<vscode-button id="function.reduce">reduce()</vscode-button>
+		// 				<div class="description">Reduce array to a single value.</div>
+		// 			</div>
+		// 		</section>
+		// 	</vscode-panel-view>
+		// `;
 
 		//footer
 		contentHTML += `</vscode-panels>`;

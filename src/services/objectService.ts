@@ -1,4 +1,4 @@
-import { globalObjectsPanelProvider } from "./../extension";
+import { globalObjectsPanelProvider, currentFile } from "./../extension";
 import { Node, deserializeNode, serializeNode } from "./../providers/node";
 import * as vscode from "vscode";
 
@@ -20,7 +20,7 @@ export class ObjectService {
 
 	addObject(name: string, jsonObject: any): void {
 		const currentObjects = this.workspaceState.get<any[]>(
-			ObjectService.OBJECTS_KEY,
+			currentFile + ":" + ObjectService.OBJECTS_KEY,
 			[]
 		);
 		const id = this.getNextId();
@@ -36,10 +36,10 @@ export class ObjectService {
 		if (!path) {
 			return;
 		}
-	
+
 		let objectService = new ObjectService(this.workspaceState);
 		let objects = objectService.getObjects();
-	
+
 		const deleteNodeInList = (nodes: Node[], path: string): Node[] => {
 			return nodes.reduce((result: Node[], node) => {
 				if (node.path === path) {
@@ -53,14 +53,14 @@ export class ObjectService {
 				return result;
 			}, []);
 		};
-	
+
 		objects = deleteNodeInList(objects, path);
 		objectService.saveObjects(objects);
 	}
 
 	getObjects(): Node[] {
 		const currentObjects = this.workspaceState.get<any[]>(
-			ObjectService.OBJECTS_KEY,
+			currentFile + ":" + ObjectService.OBJECTS_KEY,
 			[]
 		);
 
@@ -74,12 +74,12 @@ export class ObjectService {
 	saveObjects(objects: Node[]): Thenable<void> {
 		const serializedObjects = objects.map((obj) => serializeNode(obj));
 		return this.workspaceState.update(
-			ObjectService.OBJECTS_KEY,
+			currentFile + ":" + ObjectService.OBJECTS_KEY,
 			serializedObjects
 		);
 	}
 
-	async renameObjectKey(path?: string, newName: string = ''): Promise<void> {
+	async renameObjectKey(path?: string, newName: string = ""): Promise<void> {
 		let node = await globalObjectsPanelProvider.getNodeByPath(path);
 		if (node) {
 			node.label = newName;
@@ -89,25 +89,31 @@ export class ObjectService {
 
 			// Define a function to update node and its children paths
 			const updateNodePaths = (node: Node, newPathPrefix: string) => {
-				if (newPathPrefix.startsWith('.')) {
+				if (newPathPrefix.startsWith(".")) {
 					newPathPrefix = newPathPrefix.substring(1);
 				}
 				node.path = newPathPrefix + "." + node.label;
 				node.path = node.path.replace(/\.\./gi, "");
 				node.path = node.path.replace(/\.\[/gi, "[");
 				if (node.children && node.children.length > 0) {
-					node.children.forEach(child => {
+					node.children.forEach((child) => {
 						updateNodePaths(child, node.path);
 					});
 				}
 			};
-	
+
 			// Find the node in the objects list and update it
-			const updateNodeInList = (nodes: Node[], updatedNode: Node): Node[] => {
+			const updateNodeInList = (
+				nodes: Node[],
+				updatedNode: Node
+			): Node[] => {
 				return nodes.map((node) => {
 					if (node.path === updatedNode.path) {
 						node.label = updatedNode.label; // Update label
-						updateNodePaths(node, updatedNode.path.split('.').slice(0, -1).join('.'));
+						updateNodePaths(
+							node,
+							updatedNode.path.split(".").slice(0, -1).join(".")
+						);
 						return node;
 					} else if (node.children && node.children.length > 0) {
 						node.children = updateNodeInList(

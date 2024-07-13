@@ -16,6 +16,7 @@ import { copyObjectCommand } from "./commands/copyObjectCommand";
 
 //Storage
 import { ObjectService } from "./services/objectService";
+export let currentFile: string = "";
 
 //objects
 export let globalObjectsPanelProvider: ObjectsPanelProvider;
@@ -46,14 +47,32 @@ export async function activate(context: vscode.ExtensionContext) {
 	//#endregion panel setup
 
 	//#region register event
+	//on file change
+	context.subscriptions.push(
+		vscode.workspace.onDidChangeTextDocument((event) => {
+			const filePath = event.document.uri.fsPath;
+			currentFile = filePath;
+			globalObjectsPanelProvider.refresh();
+		})
+	);
+	context.subscriptions.push(
+		vscode.window.onDidChangeActiveTextEditor((editor) => {
+			if (editor) {
+				const filePath = editor.document.uri.fsPath;
+				currentFile = filePath;
+				globalObjectsPanelProvider.refresh();
+			}
+		})
+	);
+
+	//on focus tree view
 	context.subscriptions.push(
 		globalObjectsPanelTreeView.onDidChangeSelection((event: any) => {
 			globalToolProvier.refresh();
 		})
 	);
-
-	//Hover event
-	vscode.languages.registerHoverProvider("typescript", {
+	//on hover text editor
+	vscode.languages.registerHoverProvider("*", {
 		async provideHover(document, position, token) {
 			const customWordPattern = /[\w\.\?\[\]]+/g;
 
@@ -74,6 +93,10 @@ export async function activate(context: vscode.ExtensionContext) {
 					);
 
 					if (node) {
+						//make focus
+						node.focus(globalObjectsPanelTreeView);
+
+						//show hover
 						const hoverContent = new vscode.MarkdownString();
 						const nodeIcon = vscode.Uri.file(
 							path.join(
@@ -87,7 +110,9 @@ export async function activate(context: vscode.ExtensionContext) {
 						hoverContent.appendMarkdown(
 							`<span>
                                 <img src="${nodeIcon}" alt="node-icon" width="16" height="16" />&nbsp;
-                                <b>${node.label} &nbsp;<code>${node.isRoot ? 'root' : node.description}</code></b>
+                                <b>${node.label} &nbsp;<code>${
+								node.isRoot ? "root" : node.description
+							}</code></b>
 							</span>\n`
 						);
 
@@ -109,37 +134,37 @@ export async function activate(context: vscode.ExtensionContext) {
 		},
 	});
 
-	context.subscriptions.push(
-		vscode.window.onDidChangeTextEditorSelection(async (event) => {
-			const editor = event.textEditor;
-			const position = event.selections[0].active;
-			const document = editor.document;
+	// context.subscriptions.push(
+	// 	vscode.window.onDidChangeTextEditorSelection(async (event) => {
+	// 		const editor = event.textEditor;
+	// 		const position = event.selections[0].active;
+	// 		const document = editor.document;
 
-			const customWordPattern = /[\w\.\?\[\]]+/g;
+	// 		const customWordPattern = /[\w\.\?\[\]]+/g;
 
-			const wordRange = document.getWordRangeAtPosition(
-				position,
-				customWordPattern
-			);
+	// 		const wordRange = document.getWordRangeAtPosition(
+	// 			position,
+	// 			customWordPattern
+	// 		);
 
-			if (wordRange) {
-				let findPath = document.getText(wordRange).split(".");
-				if (findPath?.length > 0) {
-					if (findPath[0] === "this") {
-						findPath.shift();
-					}
+	// 		if (wordRange) {
+	// 			let findPath = document.getText(wordRange).split(".");
+	// 			if (findPath?.length > 0) {
+	// 				if (findPath[0] === "this") {
+	// 					findPath.shift();
+	// 				}
 
-					const node = await globalObjectsPanelProvider.getNodeByPath(
-						findPath.join(".")
-					);
+	// 				const node = await globalObjectsPanelProvider.getNodeByPath(
+	// 					findPath.join(".")
+	// 				);
 
-					if (node) {
-						node.focus(globalObjectsPanelTreeView);
-					}
-				}
-			}
-		})
-	);
+	// 				if (node) {
+	// 					node.focus(globalObjectsPanelTreeView);
+	// 				}
+	// 			}
+	// 		}
+	// 	})
+	// );
 	//#endregion register event
 
 	//#region register command
